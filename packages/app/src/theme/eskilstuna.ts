@@ -42,9 +42,9 @@ export const eskilstunaTheme = createUnifiedTheme({
       warningBackground: '#8f5e15',
       infoBackground: '#343b58',
       navigation: {
-        background: '#ffffff',
+        background: '#4a1a4e',
         indicator: '#af84b6',
-        color: '#000000',
+        color: '#ffffff',
         selectedColor: '#823788',
         navItem: {
           hoverBackground: '#e1d5e8',
@@ -54,6 +54,6 @@ export const eskilstunaTheme = createUnifiedTheme({
   }),
   defaultPageTheme: 'home',
   pageTheme: {
-    home: genPageTheme({ colors: ['#823788'], shape: shapes.wave }),
+    home: genPageTheme({ colors: ['#660d6e'], shape: shapes.round }),
   },
 });

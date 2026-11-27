@@ -1,8 +1,8 @@
 import React from 'react';
-import FmeIconSvg from './fme.svg';
-import DatabaseSvg from './database.svg';
-import Controllpanel from './kontrollpanel.svg';
-import GeoserverSvg from './server.svg';
+import FmeIconSvg from './fme_white.svg';
+import DatabaseSvg from './database_white.svg';
+import Controllpanel from './kontrollpanel_white.svg';
+import GeoserverSvg from './server_white.svg';
 
 export const FmeIcon = () => (
   <img src={FmeIconSvg} alt="" style={{ width: 32, height: 32 }} />
