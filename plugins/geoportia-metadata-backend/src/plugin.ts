@@ -1,13 +1,14 @@
 import {
   coreServices,
   createBackendPlugin,
-  resolvePackagePath,
+  // resolvePackagePath,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './router';
 import { MetadataService } from './services/MetadataService/MetadataService';
 import { SuggestionService } from './services/SuggestionService/SuggestionService';
 import { CatalogClient } from '@backstage/catalog-client';
 import { loadArcgisSdeDatabases } from './arcgisSde/arcgisSdeConfig';
+import { ensureGeoPortiaMetadataMigrations } from './database';
 
 export const geoportiaMetadataBackendPlugin = createBackendPlugin({
   pluginId: 'geoportia-metadata',
@@ -33,7 +34,9 @@ export const geoportiaMetadataBackendPlugin = createBackendPlugin({
         rootConfig,
         userInfo,
       }) {
+        await ensureGeoPortiaMetadataMigrations(database);
         const client = await database.getClient();
+        {/*
         if (!database.migrations?.skip) {
           await client.migrate.latest({
             directory: resolvePackagePath(
@@ -42,6 +45,7 @@ export const geoportiaMetadataBackendPlugin = createBackendPlugin({
             ),
           });
         }
+        */}
 
         const catalogClient = new CatalogClient({ discoveryApi: discovery });
         const metadata = new MetadataService(client, catalogClient, auth);

@@ -1,7 +1,7 @@
 import {
   coreServices,
   createBackendModule,
-  resolvePackagePath,
+  // resolvePackagePath,
 } from '@backstage/backend-plugin-api';
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
 import { DatabaseManager } from '@backstage/backend-defaults/database';
@@ -15,6 +15,7 @@ import {
 import { MetadataService } from './services/MetadataService/MetadataService';
 import { SuggestionService } from './services/SuggestionService/SuggestionService';
 import { CatalogClient } from '@backstage/catalog-client';
+import { ensureGeoPortiaMetadataMigrations } from './database';
 
 export const scaffolderModuleGeoportiaMetadata = createBackendModule({
   pluginId: 'scaffolder',
@@ -35,8 +36,10 @@ export const scaffolderModuleGeoportiaMetadata = createBackendModule({
           'geoportia-metadata',
           { logger, lifecycle },
         );
+        await ensureGeoPortiaMetadataMigrations(geoportiaMetadataDb);
         const client = await geoportiaMetadataDb.getClient();
 
+        {/*
         if (!geoportiaMetadataDb.migrations?.skip) {
           await client.migrate.latest({
             directory: resolvePackagePath(
@@ -45,6 +48,7 @@ export const scaffolderModuleGeoportiaMetadata = createBackendModule({
             ),
           });
         }
+        */}
 
         const catalogClient = new CatalogClient({ discoveryApi: discovery });
         const metadataService = new MetadataService(client, catalogClient, auth);

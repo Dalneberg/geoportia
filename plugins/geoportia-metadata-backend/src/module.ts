@@ -1,7 +1,7 @@
 import {
   coreServices,
   createBackendModule,
-  resolvePackagePath,
+  // resolvePackagePath,
 } from '@backstage/backend-plugin-api';
 import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
 import { DatabaseManager } from '@backstage/backend-defaults/database';
@@ -9,6 +9,7 @@ import { MetadataEntryProvider } from './MetadataEntryProvider';
 import { MetadataEntryProcessor } from './MetadataEntryProcessor';
 import { AttributeProvider } from './AttributeProvider';
 import { AttributeProcessor } from './AttributeProcessor';
+import { ensureGeoPortiaMetadataMigrations } from './database';
 
 const geoportiaMetadataBackendModule = createBackendModule({
   pluginId: 'catalog',
@@ -27,8 +28,10 @@ const geoportiaMetadataBackendModule = createBackendModule({
           'geoportia-metadata',
           { logger, lifecycle },
         );
+        await ensureGeoPortiaMetadataMigrations(geoportiaMetadataDb);
         const client = await geoportiaMetadataDb.getClient();
 
+        {/*
         // Run migrations on the shared geoportia-metadata DB. Use the same
         // tableName (knex default) as plugin.ts so they don't conflict.
         if (!geoportiaMetadataDb.migrations?.skip) {
@@ -39,6 +42,7 @@ const geoportiaMetadataBackendModule = createBackendModule({
             ),
           });
         }
+        */}
 
         const metadataTaskRunner = scheduler.createScheduledTaskRunner({
           frequency: { seconds: 5 },
